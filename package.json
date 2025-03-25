@@ -5,7 +5,7 @@
   "description": "Rent A Car Management System",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon",
+    "start": "node index.js",
     "debug": "DEBUG=* nodemon",
     "dev": "node swaggerAutogen && nodemon index.js"
   },

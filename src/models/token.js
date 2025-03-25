@@ -1,8 +1,8 @@
-"use strict"
+"use strict";
 /* -------------------------------------------------------
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
-const { mongoose } = require('../configs/dbConnection')
+const { mongoose } = require("../configs/dbConnection");
 /* ------------------------------------------------------- *
 {
   "userId": "65343222b67e9681f937f001",
@@ -11,23 +11,24 @@ const { mongoose } = require('../configs/dbConnection')
 /* ------------------------------------------------------- */
 // Token Model:
 
-const TokenSchema = new mongoose.Schema({
-
+const TokenSchema = new mongoose.Schema(
+  {
     userId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true,
-        index: true,
-    }, 
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true,
+    },
 
     token: {
-        type: String,
-        trim: true,
-        required: true,
-        index: true,
-    }, 
-
-}, { collection: 'tokens', timestamps: true })
+      type: String,
+      trim: true,
+      required: true,
+      index: true,
+    },
+  },
+  { collection: "tokens", timestamps: true }
+);
 
 /* ------------------------------------------------------- */
-module.exports = mongoose.model('Token', TokenSchema)
+module.exports = mongoose.model("Token", TokenSchema);

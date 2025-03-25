@@ -63,7 +63,7 @@ const UserSchema = new mongoose.Schema(
       default: false,
     },
   },
-  { collection: "users", timestamps: true },
+  { collection: "users", timestamps: true }
 );
 
 UserSchema.plugin(uniqueValidator, {
