@@ -19,7 +19,17 @@ const { mongoose } = require("../configs/dbConnection");
 
 // Reservation Model:
 const ReservationSchema = new mongoose.Schema(
-  {},
+  {
+    startDate: {
+        type: Date,
+        required: true,
+    },
+
+    endDate: {
+        type: Date,
+        required: true,
+    },
+  },
   {
     collection: "reservations",
     timestamps: true,
