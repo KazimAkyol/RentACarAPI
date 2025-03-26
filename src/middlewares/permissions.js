@@ -12,7 +12,7 @@ module.exports = {
     } else {
       res.errorStatusCode = 403;
       throw new Error(
-        "AuthenticationError: You must be logged in to access this resource.",
+        "AuthenticationError: You must be logged in to access this resource."
       );
     }
   },
@@ -20,7 +20,7 @@ module.exports = {
     if (!(req.user?.isActive && (req.user.isAdmin || req.user.isStaff))) {
       res.errorStatusCode = 403;
       throw new Error(
-        "AuthorizationError: You must be an Admin or Staff to access this resource.",
+        "AuthorizationError: You must be an Admin or Staff to access this resource."
       );
     }
     next();
@@ -31,7 +31,7 @@ module.exports = {
     } else {
       res.errorStatusCode = 403;
       throw new Error(
-        "AuthorizationError: You must be an Admin to access this resource.",
+        "AuthorizationError: You must be an Admin to access this resource."
       );
     }
   },

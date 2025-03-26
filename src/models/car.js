@@ -43,21 +43,27 @@ const CarSchema = new mongoose.Schema(
 
     brand: {
       type: String,
+      trim: true,
       required: true,
     },
 
     model: {
       type: String,
+      trim: true,
       required: true,
     },
 
     year: {
       type: Number,
+      trim: true,
       required: true,
+      min: 2020,
+      max: new Date().getFullYear(),
     },
 
     isAutomatic: {
       type: Boolean,
+      default: false,
     },
 
     pricePerDay: {
@@ -65,7 +71,8 @@ const CarSchema = new mongoose.Schema(
       required: true,
     },
 
-    isPublish: {
+    isAvailable: {
+      //* isPublish, datada isAvailable olarak tanimlandigi icin isAvailable yazildi.
       type: Boolean,
       required: true,
     },
