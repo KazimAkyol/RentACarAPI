@@ -1,4 +1,5 @@
 "use strict";
+
 const CustomError = require("../errors/customError");
 
 module.exports = function (password) {
@@ -11,3 +12,5 @@ module.exports = function (password) {
     );
   else return null;
 };
+
+//* Normalde errorStatusCode'u yazip throw new Error ve hata mesaji yaziyorduk. Buradaki yazim sekli daha temiz bir kod yazim seklidir.

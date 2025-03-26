@@ -15,7 +15,6 @@
 const { mongoose } = require("../configs/dbConnection");
 const passwordEncrypt = require("../helpers/passwordEncrypt");
 const uniqueValidator = require("mongoose-unique-validator");
-const passwordValidation = require("../helpers/emailValidation");
 const emailValidation = require("../helpers/emailValidation");
 // User Model:
 const UserSchema = new mongoose.Schema(
