@@ -42,6 +42,7 @@ module.exports = {
                 }
             }
         */
+
     passwordValidation(req?.body?.password);
     const data = await User.create(req.body);
 
@@ -57,7 +58,7 @@ module.exports = {
             #swagger.summary = "Get Single User"
         */
 
-    //? Yetkisiz kullanıcının başka bir kullanıcıyı yönetmesini engelle (sadece kendi verileri):
+    //* Yetkisiz kullanıcının başka bir kullanıcıyı yönetmesini engelle (sadece kendi verileri):
     // if (!req.user.isAdmin) {
     //     req.params.id = req.user.id
     // }
@@ -90,7 +91,7 @@ module.exports = {
             }
         */
 
-    //? Yetkisiz kullanıcının başka bir kullanıcıyı yönetmesini engelle (sadece kendi verileri):
+    //* Yetkisiz kullanıcının başka bir kullanıcıyı yönetmesini engelle (sadece kendi verileri):
     if (!req.user.isAdmin) req.params.id = req.user._id;
     const data = await User.updateOne({ _id: req.params.id }, req.body, {
       runValidators: true,

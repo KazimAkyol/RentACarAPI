@@ -31,7 +31,7 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       required: true,
       set: (password) => passwordEncrypt(password),
-      // select:false //* Adminsin, firmada Staff da Customer da islemleri yapiyor. Admin bile olsan Staff'in dahi sifresini görmemeli.Bu secenek ile ekrana sifre bilgisi gelmesin.
+      // select:false //* Admin durumunda, firmada Staff da Customer da islemler yapiyor. Admin bile olsa Staff'in dahi sifresini görmemeli.Bu secenek ile ekrana sifre bilgisi gelmesin.
     },
 
     email: {
@@ -63,7 +63,7 @@ const UserSchema = new mongoose.Schema(
   { collection: "users", timestamps: true }
 );
 
-//* Biz unique verileri icin kendi mesajimizi göndermek istiyorsak plugin(uniqueValidator) methodu kullanilir.
+//* Biz unique veriler icin kendi mesajimizi göndermek istiyorsak plugin(uniqueValidator) metodunu kullanabiliriz.
 UserSchema.plugin(uniqueValidator, {
   message: "This {PATH} is exist",
 });
