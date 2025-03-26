@@ -1,16 +1,15 @@
-"use strict"
+"use strict";
 /* -------------------------------------------------------
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
 // sendMail(to, subject, message):
 
-const nodemailer = require('nodemailer')
+const nodemailer = require("nodemailer");
 
-module.exports = function(to, subject, message) {
-
-    // Create Test (Fake) Email Account:
-    // nodemailer.createTestAccount().then((email) => console.log(email))
-    /*
+module.exports = function (to, subject, message) {
+  // Create Test (Fake) Email Account:
+  // nodemailer.createTestAccount().then((email) => console.log(email))
+  /*
     {
       user: 'dt2luxwyjdzufq7a@ethereal.email',
       pass: 'RyTdGXyWEbVVuaNFSY',
@@ -20,7 +19,7 @@ module.exports = function(to, subject, message) {
       web: 'https://ethereal.email'
     }
     */
-    /*
+  /*
     // Connect to mail-server:
     const transporter = nodemailer.createTransport({
          // SMTP
@@ -47,34 +46,35 @@ module.exports = function(to, subject, message) {
      })
     */
 
-    //? GoogleMail (gmail):
-    //* Google -> AccountHome -> Security -> Two-Step-Verify -> App-Passwords
-    const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-            user: 'alidrl26@gmail.com',
-            pass: 'kjbw usic ovbn lipb'
-        }
-    })
+  //? GoogleMail (gmail):
+  //* Google -> AccountHome -> Security -> Two-Step-Verify -> App-Passwords
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "alidrl26@gmail.com",
+      pass: "kjbw usic ovbn lipb",
+    },
+  });
 
-    // //? YandexMail (yandex):
-    // const transporter = nodemailer.createTransport({
-    //     service: 'Yandex',
-    //     auth: {
-    //         user: 'username@yandex.com',
-    //         pass: 'password' // your emailPassword
-    //     }
-    // })
+  // //? YandexMail (yandex):
+  // const transporter = nodemailer.createTransport({
+  //     service: 'Yandex',
+  //     auth: {
+  //         user: 'username@yandex.com',
+  //         pass: 'password' // your emailPassword
+  //     }
+  // })
 
-    transporter.sendMail({
-
-        // from: 'alidrl26@gmail.com',
-        to: to, // 'developer@CourseName.com',
-        subject: subject, // 'Hello',
-        text: message, // 'Hello There. How are you?',
-        html: message, // '<b>Hello There.</b> <p>How are you?</p>',
-
-    }, (error, success) => {
-        error ? console.log('error:', error) : console.log('success:', success)
-    })
-}
+  transporter.sendMail(
+    {
+      // from: 'alidrl26@gmail.com',
+      to: to, // 'developer@CourseName.com',
+      subject: subject, // 'Hello',
+      text: message, // 'Hello There. How are you?',
+      html: message, // '<b>Hello There.</b> <p>How are you?</p>',
+    },
+    (error, success) => {
+      error ? console.log("error:", error) : console.log("success:", success);
+    }
+  );
+};

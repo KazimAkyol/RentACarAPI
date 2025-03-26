@@ -2,6 +2,7 @@
 /* -------------------------------------------------------
     | FULLSTACK TEAM | NODEJS / EXPRESS |
 ------------------------------------------------------- */
+
 // Car Controller:
 
 const Car = require("../models/car");
@@ -21,11 +22,15 @@ module.exports = {
             `
         */
 
-    const data = await res.getModelList(Car);
+    let customFilter = { isAvailable: true }; //* Customer ise sadece available olanları getir.
+
+    if (req.user.isAdmin || req.user.isStaff) customFilter = {}; //* Admin veya Staff ise bütün verileri getir.
+
+    const data = await res.getModelList(Car, customFilter);
 
     res.status(200).send({
       error: false,
-      details: await res.getModelListDetails(Car),
+      details: await res.getModelListDetails(Car, customFilter),
       data,
     });
   },
@@ -38,12 +43,14 @@ module.exports = {
                 in: 'body',
                 required: true,
                 schema: {
-                   $ref: '#/definitions/Car'
+
+
+                $ref:"#/definitions/Car"
+                 
                 }
             }
         */
 
-    passwordValidation(req?.body?.password);
     const data = await Car.create(req.body);
 
     res.status(201).send({
