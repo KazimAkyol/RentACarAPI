@@ -7,6 +7,7 @@
 
 const Reservation = require("../models/reservation");
 const passwordValidation = require("../helpers/passwordValidation");
+const dateValidation = require("../helpers/dateValidation");
 module.exports = {
   list: async (req, res) => {
     /*
@@ -22,12 +23,16 @@ module.exports = {
             `
         */
 
-    //* Customer sadece kendi rezervasyonunu görsün, Bütün rezervasyonları is Admin ve staff görmeli
-    let customFilter = {};
+    /* --------------------------------------------------------- */
+    if (!req.user.isAdmin || !req.user.isStaff) {
+      req.body.userId = req.body._id;
+    } else if (!req.body.userId) {
+      req.body.userId = req.body._id;
+    }
+    /* --------------------------------------------------------- */
 
-    if (!req.user.isAdmin || !req.user.isStaff)
-      customFilter = { userId: req.user._id };
-
+    const date = dateValidation(req.body?.startDate, req.body?.endDate);
+    /* --------------------------------------------------------- */
     const data = await res.getModelList(Reservation, customFilter);
 
     res.status(200).send({
@@ -45,10 +50,7 @@ module.exports = {
                 in: 'body',
                 required: true,
                 schema: {
-
-
-                $ref:"#/definitions/Reservation"
-                 
+                   $ref:"#/definitions/Reservation"
                 }
             }
         */

@@ -43,10 +43,7 @@ module.exports = {
                 in: 'body',
                 required: true,
                 schema: {
-
-
-                $ref:"#/definitions/Car"
-                 
+                   $ref:"#/definitions/Car"
                 }
             }
         */
