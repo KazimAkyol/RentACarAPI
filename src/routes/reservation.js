@@ -13,15 +13,15 @@ const reservation = require("../controllers/reservation");
 
 router
   .route("/")
-  .get(permissions.isStaffOrisAdmin, reservation.list)
-  .post(reservation.create);
+  .get(permissions.isLogin, reservation.list)
+  .post(permissions.isLogin, reservation.create);
 
 router
   .route("/:id")
   .get(permissions.isLogin, reservation.read)
-  .put(permissions.isLogin, reservation.update)
-  .patch(permissions.isLogin, reservation.update)
-  .delete(permissions.isAdmin, reservation.delete);
+  .put(permissions.isStaffOrisAdmin, reservation.update)
+  .patch(permissions.isStaffOrisAdmin, reservation.update)
+  .delete(permissions.isStaffOrisAdmin, reservation.delete);
 
 /* ------------------------------------------------------- */
 module.exports = router;

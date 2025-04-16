@@ -16,6 +16,7 @@
 }
 /* ------------------------------------------------------- */
 const { mongoose } = require("../configs/dbConnection");
+const dateToLocaleString = require("../helpers/dateToLocaleString");
 
 // Reservation Model:
 const ReservationSchema = new mongoose.Schema(
@@ -25,18 +26,15 @@ const ReservationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-
-    cardId: {
+    carId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Car",
       required: true,
     },
-
     startDate: {
       type: Date,
       required: true,
     },
-
     endDate: {
       type: Date,
       required: true,
@@ -49,5 +47,15 @@ const ReservationSchema = new mongoose.Schema(
 );
 
 // Export:
+// Aşağıdaki işlem verileri döndürürken bazı düzenlemeler yapmamizi saglar:
+
+ReservationSchema.set("toJSON", {
+  transform: (doc, ret) => {
+    // ret.id = ret._id;
+    // ret.startDate = dateToLocaleString(ret.startDate);
+    // delete ret._id;
+    delete ret.__v;
+  },
+});
 
 module.exports = mongoose.model("Reservation", ReservationSchema);

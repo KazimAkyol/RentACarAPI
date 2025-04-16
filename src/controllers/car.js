@@ -6,7 +6,7 @@
 // Car Controller:
 
 const Car = require("../models/car");
-const passwordValidation = require("../helpers/passwordValidation");
+
 module.exports = {
   list: async (req, res) => {
     /*
@@ -22,9 +22,9 @@ module.exports = {
             `
         */
 
-    let customFilter = { isAvailable: true }; //* Customer ise sadece available olanları getir.
+    let customFilter = { isAvailable: true }; // customer ise sadece available olanları getir.
 
-    if (req.user.isAdmin || req.user.isStaff) customFilter = {}; //* Admin veya Staff ise bütün verileri getir.
+    if (req.user.isAdmin || req.user.isStaff) customFilter = {}; // Admin veya staf ise bütün verileri getir
 
     const data = await res.getModelList(Car, customFilter);
 
@@ -43,10 +43,24 @@ module.exports = {
                 in: 'body',
                 required: true,
                 schema: {
-                   $ref:"#/definitions/Car"
+                    $ref:"#/definitions/Car"
                 }
             }
         */
+
+    // {
+    //   "plateNumber": "06ABC123",
+    //   "brand": "Ford",
+    //   "model": "Focus",
+    //   "year": 2023,
+    //   "isAutomatic": true,
+    //   "pricePerDay": 50,
+    //   "isAvailable": true,
+
+    // },
+
+    req.body.createdId = req.user._id;
+    req.body.updatedId = req.user._id;
 
     const data = await Car.create(req.body);
 
@@ -62,7 +76,10 @@ module.exports = {
             #swagger.summary = "Get Single Car"
         */
 
-    const data = await Car.findOne({ _id: req.params._id });
+    const data = await Car.findOne({ _id: req.params.id }).populate([
+      { path: "createdId", select: "username" },
+      { path: "updatedId", select: "username" },
+    ]);
 
     res.status(200).send({
       error: false,

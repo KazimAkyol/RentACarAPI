@@ -6,6 +6,7 @@
 
 const User = require("../models/user");
 const passwordValidation = require("../helpers/passwordValidation");
+
 module.exports = {
   list: async (req, res) => {
     /*
@@ -64,6 +65,7 @@ module.exports = {
     // }
     // const data = await User.findOne({ _id: req.params.id })
 
+    //* Shorthand - admin permission
     const id = req.user.isAdmin ? req.params.id : req.user.id;
     const data = await User.findOne({ _id: id });
 
@@ -109,6 +111,10 @@ module.exports = {
             #swagger.tags = ["Users"]
             #swagger.summary = "Delete User"
         */
+
+    // Todo : Search for Soft Delete and Hard Delete
+    // Soft delete : usermodelde isDeleted bir alan oluşuturulur. Silme işlemi için sadece isDeleted:false
+    // HArd delete belli aralıklarla isDeleted olanlar silinebilir
 
     const data = await User.deleteOne({ _id: req.params.id });
 

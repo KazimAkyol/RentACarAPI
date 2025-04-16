@@ -6,8 +6,10 @@
 // Reservation Controller:
 
 const Reservation = require("../models/reservation");
-const passwordValidation = require("../helpers/passwordValidation");
+const Car = require("../models/car");
 const dateValidation = require("../helpers/dateValidation");
+const CustomError = require("../errors/customError");
+
 module.exports = {
   list: async (req, res) => {
     /*
@@ -23,16 +25,12 @@ module.exports = {
             `
         */
 
-    /* --------------------------------------------------------- */
-    if (!req.user.isAdmin || !req.user.isStaff) {
-      req.body.userId = req.body._id;
-    } else if (!req.body.userId) {
-      req.body.userId = req.body._id;
-    }
-    /* --------------------------------------------------------- */
+    //* Customer sadece kendi rezervasyonunu görsün, Bütün rezervasyonları isAdmin ve isStaff görmeli
+    let customFilter = {};
 
-    const date = dateValidation(req.body?.startDate, req.body?.endDate);
-    /* --------------------------------------------------------- */
+    if (!req.user.isAdmin || !req.user.isStaff)
+      customFilter = { userId: req.user._id };
+
     const data = await res.getModelList(Reservation, customFilter);
 
     res.status(200).send({
@@ -50,12 +48,68 @@ module.exports = {
                 in: 'body',
                 required: true,
                 schema: {
-                   $ref:"#/definitions/Reservation"
+                    $ref:"#/definitions/Reservation"
                 }
             }
         */
 
+    /* -------------------------------------------------------------------------- */
+
+    if (!req.user.isAdmin || !req.user.isStaff) {
+      req.body.userId = req.user._id;
+    } else if (!req.body.userId) {
+      req.body.userId = req.user._id;
+    }
+
+    /* -------------------------------------------------------------------------- */
+
+    const [start, end, reservedDays] = dateValidation(
+      req.body?.startDate,
+      req.body?.endDate
+    );
+
+    console.log("start,end,reservedDays", start, end, reservedDays);
+
+    // Öncelikle müsait olan araçları bulmak için müsait olmayanları bulalım
+    // Çakışan araçları buluyoruz
+    // db startDate<query end date,   db endDate> query startDate
+
+    const isReserved = await Reservation.findOne({
+      cardId: req.body.cardId,
+      startDate: { $lte: req.body?.endDate },
+      endDate: { $gte: req.body?.startDate },
+    });
+
+    if (isReserved) {
+      throw new CustomError("The car is already reserved for given dates", 400);
+    }
+    /* -------------------------------------------------------------------------- */
+
+    const userReservation = await Reservation.findOne({
+      userId: req.body.userId,
+      startDate: { $lte: req.body?.endDate },
+      endDate: { $gte: req.body?.startDate },
+    });
+    if (userReservation) {
+      throw new CustomError(
+        "The user is already reserved another car for given dates",
+        400
+      );
+    }
+    /* -------------------------------------------------------------------------- */
+    const dailyCost = await Car.findOne(
+      { _id: req.body.cardId },
+      { _id: 0, pricePerDay: 1 }
+    ).then((car) => Number(car.pricePerDay));
+
+    req.body.amount = dailyCost * reservedDays;
+
+    console.log(req.body.amount);
+    /* -------------------------------------------------------------------------- */
     const data = await Reservation.create(req.body);
+    /* -------------------------------------------------------------------------- */
+
+    // Todo: send mail to user
 
     res.status(201).send({
       error: false,
@@ -68,8 +122,15 @@ module.exports = {
             #swagger.tags = ["Reservations"]
             #swagger.summary = "Get Single Reservation"
         */
+    let customFilter = {};
 
-    const data = await Reservation.findOne({ _id: req.params._id });
+    if (!req.user.isAdmin || !req.user.isStaff)
+      customFilter = { userId: req.user._id };
+
+    const data = await Reservation.findOne({
+      _id: req.params._id,
+      ...customFilter,
+    });
 
     res.status(200).send({
       error: false,

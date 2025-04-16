@@ -11,14 +11,14 @@ const car = require("../controllers/car");
 
 // URL: /users
 
-router.route("/").get(permissions.isStaffOrisAdmin, car.list).post(car.create);
+router.route("/").get(car.list).post(permissions.isStaffOrisAdmin, car.create);
 
 router
   .route("/:id")
-  .get(permissions.isLogin, car.read)
-  .put(permissions.isLogin, car.update)
-  .patch(permissions.isLogin, car.update)
-  .delete(permissions.isAdmin, car.delete);
+  .get(car.read)
+  .put(permissions.isStaffOrisAdmin, car.update)
+  .patch(permissions.isStaffOrisAdmin, car.update)
+  .delete(permissions.isStaffOrisAdmin, car.delete);
 
 /* ------------------------------------------------------- */
 module.exports = router;
